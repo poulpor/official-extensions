@@ -1,3 +1,7 @@
+# Credits
+
+First and foremost, credits where credits is due. This idea came from the lovely lolcat, creator of [4get](https://git.lolcat.ca/lolcat). After a nice chat in the degoog discord server I decided it was worth creating a transport for it.
+
 # How to - Fplay for degoog
 
 Uses a browser extension to harvest a genuine session for each target host, then passes those cookies to curl-impersonate for outgoing requests. The browser only runs **warmup loads** when a cached session is missing or stale.
