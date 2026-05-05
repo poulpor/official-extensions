@@ -8,22 +8,28 @@
   var showOnDesktop = false;
   var cardTpl = "";
 
-  var isDesktop = function () { return window.matchMedia("(min-width: 768px)").matches; };
+  var isDesktop = function () {
+    return window.matchMedia("(min-width: 768px)").matches;
+  };
 
   const escapeHtml = (str) => {
     var el = document.createElement("span");
     el.textContent = str;
     return el.innerHTML;
-  }
+  };
 
   const proxyImageUrl = (url) => {
     if (!url) return "";
-
+    if (url.startsWith("/api/proxy/")) return url;
     return "/api/proxy/image?url=" + encodeURIComponent(url);
-  }
+  };
 
   function cleanHostname(url) {
-    try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return ""; }
+    try {
+      return new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      return "";
+    }
   }
 
   const formatDate = (dateStr) => {
@@ -39,28 +45,35 @@
     var days = Math.floor(hours / 24);
     if (days < 7) return days + "d ago";
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  }
+  };
 
   const faviconUrl = (url) => {
     try {
       var hostname = new URL(url).hostname;
-      return "/api/proxy/image?url=" + encodeURIComponent("https://www.google.com/s2/favicons?domain=" + hostname + "&sz=128");
-    } catch { return ""; }
-  }
+      return "/api/proxy/favicon?domain=" + encodeURIComponent(hostname);
+    } catch {
+      return "";
+    }
+  };
 
   const skeletonCards = (count) => {
     var html = '<div class="skeleton-feed" aria-hidden="true">';
     for (var i = 0; i < count; i++) {
-      html += '<div class="skeleton-feed-card"><div class="skeleton-feed-image"></div><div class="skeleton-feed-body"><div class="skeleton-feed-line skeleton-feed-source"></div><div class="skeleton-feed-line skeleton-feed-title"></div></div></div>';
+      html +=
+        '<div class="skeleton-feed-card"><div class="skeleton-feed-image"></div><div class="skeleton-feed-body"><div class="skeleton-feed-line skeleton-feed-source"></div><div class="skeleton-feed-line skeleton-feed-title"></div></div></div>';
     }
     html += "</div>";
     return html;
-  }
+  };
 
   const renderCard = (item) => {
     var image = item.thumbnail
-      ? '<img class="home-feed-card-img" src="' + escapeHtml(proxyImageUrl(item.thumbnail)) + '" alt="" loading="lazy" onerror="this.parentElement.querySelector(\'.home-feed-card-img\')?.remove()">'
-      : '<div class="home-feed-card-favicon-wrap"><img class="home-feed-card-favicon" src="' + escapeHtml(faviconUrl(item.url)) + '" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>';
+      ? '<img class="home-feed-card-img" src="' +
+        escapeHtml(proxyImageUrl(item.thumbnail)) +
+        '" alt="" loading="lazy" onerror="this.parentElement.querySelector(\'.home-feed-card-img\')?.remove()">'
+      : '<div class="home-feed-card-favicon-wrap"><img class="home-feed-card-favicon" src="' +
+        escapeHtml(faviconUrl(item.url)) +
+        '" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>';
     var source = escapeHtml(item.source || cleanHostname(item.url));
     var dateStr = formatDate(item.pubDate);
     var datePart = dateStr
@@ -80,19 +93,29 @@
       });
     }
 
-    return '<a class="home-feed-card" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">'
-      + image
-      + '<div class="home-feed-card-body">'
-      + '<div class="home-feed-card-meta"><span class="home-feed-card-source">' + source + "</span>" + datePart + "</div>"
-      + '<div class="home-feed-card-title">' + escapeHtml(item.title) + "</div>"
-      + "</div></a>";
-  }
+    return (
+      '<a class="home-feed-card" href="' +
+      escapeHtml(item.url) +
+      '" target="_blank" rel="noopener">' +
+      image +
+      '<div class="home-feed-card-body">' +
+      '<div class="home-feed-card-meta"><span class="home-feed-card-source">' +
+      source +
+      "</span>" +
+      datePart +
+      "</div>" +
+      '<div class="home-feed-card-title">' +
+      escapeHtml(item.title) +
+      "</div>" +
+      "</div></a>"
+    );
+  };
 
   const createCardElement = (item) => {
     var temp = document.createElement("div");
     temp.innerHTML = renderCard(item);
     return temp.firstChild;
-  }
+  };
 
   function interleaveCards(container, sentinel) {
     var cards = Array.from(container.querySelectorAll(".home-feed-card"));
@@ -166,7 +189,10 @@
       }
       if (desktop && showOnDesktop) {
         container.innerHTML = skeletonCards(6);
-        container.classList.add("home-news-feed--loading", "home-news-feed--desktop");
+        container.classList.add(
+          "home-news-feed--loading",
+          "home-news-feed--desktop",
+        );
         container.appendChild(sentinel);
       }
     });
@@ -197,7 +223,6 @@
         return;
       }
       interleaveCards(container, sentinel);
-      exhausted = true;
     });
 
     es.onerror = function () {

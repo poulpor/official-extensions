@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const cheerio = require("cheerio");
 
+let _signProxyUrl = null;
+
 let template = "";
 let cardTemplate = "";
 
@@ -296,7 +298,7 @@ const _cleanUrl = (url) => {
 const _faviconUrl = (url) => {
   try {
     const hostname = new URL(url).hostname;
-    return `/api/proxy/image?url=${encodeURIComponent(`https://www.google.com/s2/favicons?domain=${hostname}&sz=32`)}`;
+    return `/api/proxy/favicon?domain=${encodeURIComponent(hostname)}`;
   } catch {
     return "";
   }
@@ -304,6 +306,7 @@ const _faviconUrl = (url) => {
 
 const _proxyImageUrl = (url) => {
   if (!url) return "";
+  if (_signProxyUrl) return _signProxyUrl(url);
   return `/api/proxy/image?url=${encodeURIComponent(url)}`;
 };
 
@@ -339,7 +342,7 @@ const _serializeItem = (item) => {
     url: item.url,
     snippet: item.description,
     source: item.source,
-    thumbnail: item.thumbnail,
+    thumbnail: _proxyImageUrl(item.thumbnail),
     pubDate: item.pubDate ? item.pubDate.toISOString() : null,
   };
 }
@@ -374,6 +377,7 @@ const slot = {
   async init(ctx) {
     template = ctx.template;
     cardTemplate = await ctx.readFile("card.html");
+    if (ctx.signProxyUrl) _signProxyUrl = ctx.signProxyUrl;
   },
 
   configure(settings) {

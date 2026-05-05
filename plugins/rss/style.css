@@ -42,7 +42,12 @@
 .skeleton-feed-image {
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: linear-gradient(90deg, var(--bg-light) 25%, var(--bg-hover) 50%, var(--bg-light) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--bg-light) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-light) 75%
+  );
   background-size: 200% 100%;
   animation: rss-skeleton-shimmer 1.6s ease-in-out infinite;
 }
@@ -53,7 +58,12 @@
   gap: 8px;
 }
 .skeleton-feed-line {
-  background: linear-gradient(90deg, var(--bg-light) 25%, var(--bg-hover) 50%, var(--bg-light) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--bg-light) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-light) 75%
+  );
   background-size: 200% 100%;
   animation: rss-skeleton-shimmer 1.6s ease-in-out infinite;
   border-radius: 4px;
@@ -68,8 +78,12 @@
 }
 
 @keyframes rss-skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 @keyframes home-feed-fade-in {
@@ -85,23 +99,44 @@
 
 .home-feed-card {
   display: block;
-  background: var(--bg-light);
-  border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
   transition: background 0.15s;
   animation: home-feed-fade-in 0.4s ease-out backwards;
 }
-.home-feed-card:nth-child(1) { animation-delay: 0.02s; }
-.home-feed-card:nth-child(2) { animation-delay: 0.06s; }
-.home-feed-card:nth-child(3) { animation-delay: 0.1s; }
-.home-feed-card:nth-child(4) { animation-delay: 0.14s; }
-.home-feed-card:nth-child(5) { animation-delay: 0.18s; }
-.home-feed-card:nth-child(6) { animation-delay: 0.22s; }
-.home-feed-card:nth-child(7) { animation-delay: 0.26s; }
-.home-feed-card:nth-child(8) { animation-delay: 0.3s; }
-.home-feed-card:nth-child(n+9) { animation-delay: 0.34s; }
+
+.home-feed-card.ext-card {
+  padding: 0;
+}
+
+.home-feed-card:nth-child(1) {
+  animation-delay: 0.02s;
+}
+.home-feed-card:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.home-feed-card:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.home-feed-card:nth-child(4) {
+  animation-delay: 0.14s;
+}
+.home-feed-card:nth-child(5) {
+  animation-delay: 0.18s;
+}
+.home-feed-card:nth-child(6) {
+  animation-delay: 0.22s;
+}
+.home-feed-card:nth-child(7) {
+  animation-delay: 0.26s;
+}
+.home-feed-card:nth-child(8) {
+  animation-delay: 0.3s;
+}
+.home-feed-card:nth-child(n + 9) {
+  animation-delay: 0.34s;
+}
 
 .home-feed-card:active {
   background: var(--bg-hover);
