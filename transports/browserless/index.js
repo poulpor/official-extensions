@@ -97,14 +97,6 @@ export default class BrowserlessTransport {
         "When to consider the page fully loaded. Use 'networkidle' for JavaScript-heavy pages.",
     },
     {
-      key: "stealth",
-      label: "Stealth mode",
-      type: "toggle",
-      default: "true",
-      description:
-        "Enable Browserless stealth mode to reduce bot detection signals.",
-    },
-    {
       key: "bypassProxy",
       label: "Bypass proxy for Browserless endpoint",
       type: "toggle",
@@ -118,7 +110,6 @@ export default class BrowserlessTransport {
   _token = "";
   _timeoutMs = 15000;
   _waitUntil = "networkidle";
-  _stealth = true;
   _bypassProxy = true;
   _warmupEnabled = false;
 
@@ -126,7 +117,6 @@ export default class BrowserlessTransport {
     this._url = (settings.url || "").replace(/\/+$/, "").trim();
     this._token = (settings.token || "").trim();
     this._bypassProxy = settings.bypassProxy !== "false";
-    this._stealth = settings.stealth !== "false";
     this._warmupEnabled = settings.warmupEnabled === "true";
     this._timeoutMs = Math.max(
       3000,
@@ -163,14 +153,13 @@ export default class BrowserlessTransport {
 
     const payload = {
       url,
-      stealth: this._stealth,
       gotoOptions: {
         waitUntil: WAIT_UNTIL_MAP[this._waitUntil] ?? "networkidle0",
         timeout: this._timeoutMs,
       },
     };
 
-    if (userAgent) payload.userAgent = userAgent;
+    if (userAgent) payload.userAgent = { userAgent };
     if (Object.keys(extraHeaders).length > 0)
       payload.setExtraHTTPHeaders = extraHeaders;
     if (cookies.length > 0) payload.cookies = cookies;
@@ -190,7 +179,6 @@ export default class BrowserlessTransport {
             headers,
             body: JSON.stringify({
               url: origin,
-              stealth: this._stealth,
               gotoOptions: {
                 waitUntil: "domcontentloaded",
                 timeout: this._timeoutMs,
