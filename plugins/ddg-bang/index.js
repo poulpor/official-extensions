@@ -32,7 +32,7 @@ export default {
   name: "DuckDuckGo !bangs",
   description:
     "Type !! followed by any ddg bang command to trigger them directly from degoog. This WILL route through duckduckgo.",
-  trigger: "ddg",
+  trigger: "ddb",
   aliases: ["ddb", "dbang"],
 
   settingsSchema: [],

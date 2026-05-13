@@ -153,6 +153,17 @@ Adds a Google-style apps grid next to the settings icon. Apps are customised via
 
 </details>
 
+### Spell Check
+
+Intercepts search queries and corrects spelling using [LanguageTool](https://languagetool.org). Point it at a self-hosted instance for full privacy — the public API works out of the box with no key required. Supports all languages LanguageTool supports. Single-word queries are skipped to avoid false positives.
+
+<details>
+<summary>Screenshot</summary>
+
+![Spell Check](plugins/spell-check/screenshots/1.png)
+
+</details>
+
 ### DuckDuckGo bang redirect
 
 Type `!!` followed by any DuckDuckGo bang command to trigger them directly from degoog. This will route through DuckDuckGo.
@@ -263,7 +274,7 @@ Fetches pages through a self-hosted Camoufox service (stealth Firefox). Patches 
 
 </details>
 
-### degoog-fplay
+### degoog-4play
 
 Uses a browser extension to harvest a genuine session for each target host, then passes those cookies to curl-impersonate for outgoing requests.
 
