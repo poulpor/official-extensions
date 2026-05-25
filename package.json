@@ -214,7 +214,7 @@
       "path": "engines/google",
       "name": "Google",
       "description": "Adds Google web search to degoog.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "legacyIds": [
         "google",
         "google-engine"
