@@ -140,7 +140,6 @@ export default class GoogleEngine {
   name = "Google";
   bangShortcut = "g";
   safeSearch = "off";
-  minDegoogVersion = "0.19.0";
   settingsSchema = [
     {
       key: "outgoingTransport",
