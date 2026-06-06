@@ -46,7 +46,7 @@ export const buildPanelHtml = (t, query, sources) => {
     '<div class="glance-ai degoog-panel degoog-panel--slot degoog-panel--slot-body-padded degoog-vstack"' +
     ` data-stream="1" data-query="${escapeHtml(query)}"` +
     ` data-sources="${escapeHtml(sourcesJson)}">` +
-    '<div class="glance-ai-messages">' +
+    '<div class="glance-ai-summary-wrap">' +
     '<div class="glance-ai-body glance-ai-body--clamped">' +
     '<div class="glance-snippet glance-ai-stream degoog-text degoog-text--md" data-state="pending">' +
     '<div class="skeleton-glance glance-ai-skeleton" aria-hidden="true">' +
@@ -59,6 +59,7 @@ export const buildPanelHtml = (t, query, sources) => {
     `<button class="glance-ai-expand" type="button">${t("ai-summary.read-more")}</button>` +
     "</div>" +
     '<div class="glance-ai-chat" hidden>' +
+    '<div class="glance-ai-messages"></div>' +
     `<textarea class="glance-ai-input degoog-input degoog-input--chat" placeholder="${t("ai-summary.follow-up-placeholder")}" rows="1"></textarea>` +
     "</div>" +
     "</div>"
