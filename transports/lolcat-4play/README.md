@@ -11,7 +11,7 @@ Routes searches through a real Firefox session using the official [4play](https:
 ## How it works
 
 1. The official 4play Firefox extension connects to degoog's WebSocket endpoint on the main port.
-2. For each engine request, degoog opens a tab in the connected Firefox, waits for full DOM load, extracts the rendered HTML, and closes the tab.
+2. For each engine request, degoog opens a tab in the connected Firefox, receives the 4play web response, wraps it for the engine, and closes the tab.
 
 ## Requirements
 
@@ -30,7 +30,7 @@ git clone https://git.lolcat.ca/lolcat/4play.git
 
 - Open `about:debugging` -> This Firefox -> **Load Temporary Add-on** -> select `manifest.json` from `4play/extension/`.
 - Click the extension icon in the toolbar.
-- Find the exact WebSocket URL in **Settings -> Transports -> 4play (lolcat) -> Configure** — it is shown at the top of the settings panel. If you set a password, append it as a path segment. The WebSocket runs on degoog's main port — no separate port needed.
+- Find the exact WebSocket URL in **Settings -> Transports -> 4play (lolcat) -> Configure**. It is shown at the top of the settings panel. If you set a password, append it as a path segment. The WebSocket runs on degoog's main port, no separate port needed.
 - The badge turns green when connected.
 
 ## 2. Configure in degoog
@@ -43,7 +43,9 @@ Settings -> Transports -> 4play (lolcat) -> Configure:
 - **Page load timeout** - how long to wait for a tab to load before giving up (default 30000 ms).
 ### Container isolation
 
-- **Container isolation** - open each request in a fresh Firefox container, deleted after the tab closes. Enabled automatically when a proxy is configured.
+- **Container isolation** - open requests in isolated Firefox containers. Enabled by default and also forced on when a proxy is configured.
+- **Max container pool size** - maximum number of warm containers to keep available for concurrent requests.
+- **Container TTL** - how long a warm container may be reused before it is recycled.
 
 ### Proxy (optional)
 
@@ -58,6 +60,7 @@ Then, in Settings -> Engines -> Configure -> Advanced, pick `lolcat-4play` as th
 
 - **Firefox only** - use degoog-fplay for Chrome/Edge/Brave support.
 - **One browser connection** - a single Firefox instance connects. Parallel engine queries each open their own tab concurrently.
+- **Warm containers** - isolated containers are reused up to the configured pool size and recycled when settings change or their TTL expires.
 - **Tabs are visible** - tabs flicker in the connected Firefox window as requests come in.
 - **Session state is native** - cookies persist across tabs within the same profile. Container isolation keeps parallel requests separated.
 - **Clean profile recommended** - dedicated Firefox profile, no personal data, no interfering extensions.
