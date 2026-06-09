@@ -2,6 +2,16 @@ import * as cheerio from "cheerio";
 
 const FALLBACK_UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36";
 
+const _bingMkt = (lang, buildAL) => {
+  if (lang.includes("-")) return lang;
+  const al = buildAL?.();
+  if (al) {
+    const primary = al.split(",")[0].split(";")[0].trim();
+    if (primary.includes("-")) return primary;
+  }
+  return lang;
+};
+
 const TIME_RANGE_MAP = {
   hour: 'ex1:"ez1"',
   day: 'ex1:"ez2"',
@@ -21,7 +31,7 @@ export default class BingNewsEngine {
     const params = new URLSearchParams({ q: query, form: "NSBABR" });
     if (lang) {
       params.set("setlang", lang);
-      params.set("mkt", lang);
+      params.set("mkt", _bingMkt(lang, context?.buildAcceptLanguage));
     }
     if (offset > 0) params.set("first", String(offset + 1));
     if (timeFilter && timeFilter !== "any" && timeFilter !== "custom" && TIME_RANGE_MAP[timeFilter]) {
