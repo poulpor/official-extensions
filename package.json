@@ -507,12 +507,6 @@
       "name": "Highlight previous result",
       "description": "Move focus to the previous result link.",
       "version": "1.0.0"
-    },
-    {
-      "path": "shortcuts/result-open",
-      "name": "Open highlighted result",
-      "description": "Open the currently focused result link.",
-      "version": "1.0.0"
     }
   ]
 }
