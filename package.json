@@ -165,7 +165,7 @@
       "path": "themes/degoog-docs",
       "name": "Degoog Docs",
       "description": "A theme that matches the degoog documentation site.",
-      "version": "1.0.2"
+      "version": "1.0.3"
     },
     {
       "path": "themes/zen",
