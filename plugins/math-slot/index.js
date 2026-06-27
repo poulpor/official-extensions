@@ -1,8 +1,12 @@
 let mathEnabled = true;
 
-const MATH_PATTERN = /^[a-z0-9\s+\-*/.^()[\]{},√]+$/i;
 const HAS_DIGIT = /\d/;
 const MAX_EXPR_LEN = 120;
+
+const MATH_TOKEN =
+  /\b(?:sqrt|cbrt|nthroot|abs|sign|sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|log|log10|log2|ln|exp|round|floor|ceil|pow|mod|gcd|lcm|factorial|pi|tau|phi|e)\b/g;
+const OPERATOR = /[+\-*/^%]/;
+const NON_FUNC_LEFTOVER = /^[0-9\s+\-*/.^(),%]*$/;
 const MATHJS_API = "https://api.mathjs.org/v4/";
 
 const CALC_KEYS = [
@@ -120,8 +124,15 @@ export const slot = {
   trigger(query) {
     const q = query.trim();
     if (!mathEnabled || q.length < 1 || q.length > MAX_EXPR_LEN) return false;
-    const expr = _parseExpr(q);
-    return HAS_DIGIT.test(expr) && MATH_PATTERN.test(expr);
+
+    const expr = _sanitize(_parseExpr(q));
+    if (!HAS_DIGIT.test(expr)) return false;
+
+    const leftover = expr.replace(MATH_TOKEN, " ");
+    if (!NON_FUNC_LEFTOVER.test(leftover)) return false;
+
+    const hasFunc = leftover !== expr;
+    return hasFunc || OPERATOR.test(leftover);
   },
 
   async execute(query, context) {
