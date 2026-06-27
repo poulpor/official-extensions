@@ -91,7 +91,10 @@ export default class TheGuardianEngine {
 
     try {
       const response = await doFetch(`${API_URL}?${params.toString()}`, {
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          "User-Agent": context?.userAgent?.() ?? "Mozilla/5.0 (compatible; degoog/1.0)",
+        },
       });
       context?.sentinel?.(response, this.name);
       const data = await response.json();

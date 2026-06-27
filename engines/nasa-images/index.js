@@ -28,6 +28,7 @@ export default class NasaImagesEngine {
         headers: {
           Accept: "application/json",
           "Accept-Language": context?.buildAcceptLanguage?.() ?? "en,en-US;q=0.9",
+          "User-Agent": context?.userAgent?.() ?? "Mozilla/5.0 (compatible; degoog/1.0)",
         },
       });
 

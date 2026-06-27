@@ -37,7 +37,7 @@ export default class InternetArchiveEngine {
     const doFetch = context?.fetch ?? fetch;
     const response = await doFetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; degoog/1.0)",
+        "User-Agent": context?.userAgent?.() ?? "Mozilla/5.0 (compatible; degoog/1.0)",
         Accept: "application/json",
       },
     });

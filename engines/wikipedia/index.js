@@ -3,6 +3,13 @@ const WIKI_HEADERS = {
   "Api-User-Agent": "degoog/1.0 (+https://github.com/degoog-org/degoog)",
 };
 
+const LANG_RE = /^[a-z]{2,3}$/;
+
+const _wikiHost = (lang) => {
+  if (lang && LANG_RE.test(lang)) return `${lang}.wikipedia.org`;
+  return "en.wikipedia.org";
+};
+
 export default class WikipediaEngine {
   isClientExposed = false;
   name = "Wikipedia";
@@ -12,7 +19,8 @@ export default class WikipediaEngine {
     const q = query.trim();
     if (!q) return [];
     const offset = ((page || 1) - 1) * 15;
-    const url = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&srlimit=15&sroffset=${offset}&utf8=1`;
+    const host = _wikiHost(context?.lang);
+    const url = `https://${host}/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&srlimit=15&sroffset=${offset}&utf8=1`;
     const doFetch = context?.fetch ?? fetch;
     const response = await doFetch(url, { headers: WIKI_HEADERS });
     context?.sentinel?.(response, this.name);
@@ -25,7 +33,7 @@ export default class WikipediaEngine {
 
     return items.map((item) => ({
       title: item.title,
-      url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, "_"))}`,
+      url: `https://${host}/wiki/${encodeURIComponent(item.title.replace(/ /g, "_"))}`,
       snippet: (item.snippet ?? "").replace(/<[^>]+>/g, "").trim(),
       source: this.name,
     }));
