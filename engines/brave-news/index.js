@@ -54,7 +54,7 @@ export default class BraveNewsEngine {
     const $ = cheerio.load(html);
     const results = [];
 
-    $("a.l1.svelte-md19lk, a[href^='http'][target='_self'][class*='svelte']").each((_, el) => {
+    $("a[target='_self'][href^='http']").each((_, el) => {
       const $el = $(el);
       const href = $el.attr("href") ?? "";
       if (!href) return;
@@ -62,12 +62,8 @@ export default class BraveNewsEngine {
         const parsed = new URL(href, "https://search.brave.com");
         if (parsed.hostname === "search.brave.com") return;
       } catch { return; }
-      const title = $el.find("div.title.svelte-md19lk").text().trim()
-        || $el.find(".title").text().trim()
-        || $el.text().trim();
-      const snippet = $el.find("div.description.t-primary").text().trim()
-        || $el.find(".content .description").text().trim()
-        || "";
+      const title = $el.find("div.title").text().trim() || $el.text().trim();
+      const snippet = $el.find("div.description").text().trim() || "";
       const thumbnail = context?.extractImageUrl?.($el, "https://search.brave.com", [
         ".snippet-thumbnail-wrapper .thumbnail img",
         ".result-thumbnail-wrapper .thumbnail img",
