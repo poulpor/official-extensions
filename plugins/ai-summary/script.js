@@ -360,6 +360,7 @@
 
     const reply = document.createElement("div");
     reply.className = "glance-ai-reply";
+    reply.dataset.state = "pending";
     reply.innerHTML = skeletonHtml();
     messagesEl.appendChild(reply);
 
@@ -370,13 +371,16 @@
       thinkAnchor: reply,
       thinkPos: "before",
       onFirstText: () => {
+        reply.dataset.state = "streaming";
         reply.innerHTML = writingHtml();
       },
       onComplete: (out) => {
         history.push({ role: "assistant", content: out });
+        reply.dataset.state = "done";
         reply.innerHTML = renderRich(out);
       },
       onFail: (msg) => {
+        reply.dataset.state = "error";
         reply.remove();
         const err = document.createElement("div");
         err.className = "glance-ai-typing";
