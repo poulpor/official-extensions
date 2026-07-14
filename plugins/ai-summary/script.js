@@ -380,8 +380,13 @@
         reply.innerHTML = renderRich(out);
       },
       onFail: (msg) => {
-        reply.dataset.state = "error";
+      onFail: (msg) => {
         reply.remove();
+        const err = document.createElement("div");
+        err.className = "glance-ai-typing";
+        err.dataset.state = "error";
+        err.textContent = msg;
+        messagesEl.appendChild(err);
         const err = document.createElement("div");
         err.className = "glance-ai-typing";
         err.textContent = msg;
