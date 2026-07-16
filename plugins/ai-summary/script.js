@@ -310,6 +310,11 @@
       },
       onFail: (msg) => {
         streamDone = true;
+        if (box.dataset.hideOnError === "1") {
+          document.removeEventListener("click", onDocClick, { capture: true });
+          box.remove();
+          return;
+        }
         target.dataset.state = "error";
         target.textContent = msg;
         if (bodyEl) bodyEl.classList.remove("glance-ai-body--clamped");
@@ -380,13 +385,8 @@
         reply.innerHTML = renderRich(out);
       },
       onFail: (msg) => {
-      onFail: (msg) => {
+        reply.dataset.state = "error";
         reply.remove();
-        const err = document.createElement("div");
-        err.className = "glance-ai-typing";
-        err.dataset.state = "error";
-        err.textContent = msg;
-        messagesEl.appendChild(err);
         const err = document.createElement("div");
         err.className = "glance-ai-typing";
         err.textContent = msg;
@@ -466,3 +466,4 @@
   const existing = glanceEl.querySelector(".glance-ai");
   if (existing) bootBox(existing);
 })();
+
